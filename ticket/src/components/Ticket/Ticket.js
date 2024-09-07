@@ -6,6 +6,31 @@ import Row from "react-bootstrap/Row";
 import "./Ticket.css";
 
 export default class Ticket extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      countriesData: {
+        Iran: ["Tehran", "Tabriz", "Shiraz", "Esfahan", "Mashhad"],
+        Turkey: ["Istanbul", "Ezmir", "Ankara", "Antaliya"],
+        US: ["Los Angles", "San Diego", "Chicago"],
+      },
+      selectedCountrysCity: [],
+    };
+  }
+
+  countrySelection(event) {
+    if (event.target.value === "-1") {
+      this.setState({
+        selectedCountrysCity: [],
+      });
+    } else {
+      let choosenCountry = this.state.countriesData[event.target.value];
+
+      this.setState({
+        selectedCountrysCity: choosenCountry,
+      });
+    }
+  }
   render() {
     return (
       <div className="container">
@@ -35,19 +60,27 @@ export default class Ticket extends Component {
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formGridCountry">
               <Form.Label>State</Form.Label>
-              <Form.Select defaultValue="Select Country...">
-                <option>Select Country...</option>
-                <option>Iran</option>
-                <option>Turkey</option>
-                <option>United State</option>
+              <Form.Select
+                defaultValue="Select Country..."
+                onChange={(event) => this.countrySelection(event)}
+              >
+                <option value="-1">Select Country...</option>
+                <option value="Iran">Iran</option>
+                <option value="Turkey">Turkey</option>
+                <option value="US">United State</option>
               </Form.Select>
             </Form.Group>
 
             <Form.Group as={Col} controlId="formGridCity">
               <Form.Label>State</Form.Label>
               <Form.Select defaultValue="Choose...">
-                <option>Choose City...</option>
-                <option>...</option>
+                {this.state.selectedCountrysCity.length ? (
+                  this.state.selectedCountrysCity.map((city) => (
+                    <option value={city}>{city}</option>
+                  ))
+                ) : (
+                  <option value="-1">Choose...</option>
+                )}
               </Form.Select>
             </Form.Group>
           </Row>
